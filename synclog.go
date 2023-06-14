@@ -29,7 +29,7 @@ type rpcSyncLogPeer struct {
 }
 
 func (r *rpcSyncLogPeer) All(ctx context.Context, data []byte) ([]any, error) {
-	log.Printf("[rpc] %s → ALL: %x (ignore responses)", r.id, data)
+	log.Printf("[rpc] %s → ALL: %x (all)", r.id, data)
 	var res []any
 	for _, p := range r.pool {
 		buf, e := p.run(ctx, data)
@@ -44,7 +44,7 @@ func (r *rpcSyncLogPeer) All(ctx context.Context, data []byte) ([]any, error) {
 }
 
 func (r *rpcSyncLogPeer) Broadcast(ctx context.Context, data []byte) error {
-	log.Printf("[rpc] %s → ALL: %x (broadcast)", r.id, data)
+	log.Printf("[rpc] %s → ALL: %x (responses ignored)", r.id, data)
 	for _, p := range r.pool {
 		p.run(ctx, data)
 	}
