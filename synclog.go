@@ -84,6 +84,19 @@ func (r *rpcSyncLogPeer) Connect(cb func(context.Context, []byte) ([]byte, error
 	r.target = cb
 }
 
+func (r *rpcSyncLogPeer) ListOnlinePeers() []string {
+	log.Printf("[rpc] %s: listing online peers")
+	res := make([]string, 0, len(r.pool))
+	for p := range r.pool {
+		res = append(res, p)
+	}
+	return res
+}
+
+func (r *rpcSyncLogPeer) CountAllPeers() int {
+	return len(r.pool)
+}
+
 func (r *rpcSyncLogPeer) run(ctx context.Context, data []byte) ([]byte, error) {
 	t := r.target
 	if t != nil {

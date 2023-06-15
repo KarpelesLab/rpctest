@@ -69,6 +69,18 @@ func (r *rpcAsyncPeer) Connect(cb func(context.Context, []byte) ([]byte, error))
 	r.target = cb
 }
 
+func (r *rpcAsyncPeer) ListOnlinePeers() []string {
+	res := make([]string, 0, len(r.pool))
+	for p := range r.pool {
+		res = append(res, p)
+	}
+	return res
+}
+
+func (r *rpcAsyncPeer) CountAllPeers() int {
+	return len(r.pool)
+}
+
 func (r *rpcAsyncPeer) run(ctx context.Context, data []byte) ([]byte, error) {
 	t := r.target
 	if t != nil {

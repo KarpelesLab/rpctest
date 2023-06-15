@@ -69,6 +69,18 @@ func (r *rpcSyncPeer) Connect(cb func(context.Context, []byte) ([]byte, error)) 
 	r.target = cb
 }
 
+func (r *rpcSyncPeer) ListOnlinePeers() []string {
+	res := make([]string, 0, len(r.pool))
+	for p := range r.pool {
+		res = append(res, p)
+	}
+	return res
+}
+
+func (r *rpcSyncPeer) CountAllPeers() int {
+	return len(r.pool)
+}
+
 func (r *rpcSyncPeer) run(ctx context.Context, data []byte) ([]byte, error) {
 	t := r.target
 	if t != nil {
