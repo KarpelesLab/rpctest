@@ -29,6 +29,9 @@ type rpcSyncPeer struct {
 func (r *rpcSyncPeer) All(ctx context.Context, data []byte) ([]any, error) {
 	var res []any
 	for _, p := range r.pool {
+		if p == r {
+			continue
+		}
 		r, e := p.run(ctx, data)
 		if e != nil {
 			res = append(res, e)
@@ -41,6 +44,9 @@ func (r *rpcSyncPeer) All(ctx context.Context, data []byte) ([]any, error) {
 
 func (r *rpcSyncPeer) Broadcast(ctx context.Context, data []byte) error {
 	for _, p := range r.pool {
+		if p == r {
+			continue
+		}
 		p.run(ctx, data)
 	}
 	return nil

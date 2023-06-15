@@ -32,6 +32,9 @@ func (r *rpcSyncLogPeer) All(ctx context.Context, data []byte) ([]any, error) {
 	log.Printf("[rpc] %s → ALL: %x (all)", r.id, data)
 	var res []any
 	for _, p := range r.pool {
+		if p == r {
+			continue
+		}
 		buf, e := p.run(ctx, data)
 		if e != nil {
 			log.Printf("[rpc] %s → %s: error %s", p.id, r.id, e)
@@ -46,6 +49,9 @@ func (r *rpcSyncLogPeer) All(ctx context.Context, data []byte) ([]any, error) {
 func (r *rpcSyncLogPeer) Broadcast(ctx context.Context, data []byte) error {
 	log.Printf("[rpc] %s → ALL: %x (responses ignored)", r.id, data)
 	for _, p := range r.pool {
+		if p == r {
+			continue
+		}
 		p.run(ctx, data)
 	}
 	return nil
@@ -75,7 +81,6 @@ func (r *rpcSyncLogPeer) Send(ctx context.Context, id string, data []byte) error
 }
 
 func (r *rpcSyncLogPeer) Self() string {
-	log.Printf("[rpc] %s: who am I?", r.id)
 	return r.id
 }
 
