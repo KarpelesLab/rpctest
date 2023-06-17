@@ -10,6 +10,11 @@ type rpcLogPeer struct {
 }
 
 func NewLogPeer(r RPC) RPC {
+	if r == nil {
+		log.Printf("[rpc] Instanciated with nil RPC, communications disabled")
+		return nil
+	}
+	log.Printf("[rpc] Instanciated peer %s", r.Self())
 	return &rpcLogPeer{RPC: r}
 }
 
