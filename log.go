@@ -14,6 +14,10 @@ func NewLogPeer(r RPC) RPC {
 		log.Printf("[rpc] Instanciated with nil RPC, communications disabled")
 		return nil
 	}
+	if _, ok := r.(*rpcLogPeer); ok {
+		// avoid double logging
+		return r
+	}
 	log.Printf("[rpc] Instanciated peer %s", r.Self())
 	return &rpcLogPeer{RPC: r}
 }
